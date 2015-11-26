@@ -107,6 +107,8 @@ static void *worker_main(void *arg){
 
     src_val = read_from_file(request->inputfilename, &src_len);
 
+    dst_len = 0;
+    dst_val = NULL;
     dst_val = minify_via_rpc(cl, src_val, src_len, &dst_len);
 
     write_to_file(request->outputfilename, dst_val, dst_len);

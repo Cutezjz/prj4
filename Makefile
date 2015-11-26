@@ -1,5 +1,5 @@
 CC     = gcc
-CFLAGS = -Wall
+CFLAGS = -Wall -g
 
 LIBS = -lpthread
 
@@ -22,6 +22,7 @@ minifyjpeg_main: minifyjpeg_main.o minify_via_rpc.o steque.o
 minifyjpeg_svc: minifyjpeg_svc.o  minifyjpeg_xdr.o minifyjpeg.o magickminify.o steque.o
 	$(CC) -o $@ $(CFLAGS) $(MAGICK_FLAGS) -DRPC_SVC_FG $^ $(LIBS) $(MAGICK_LIBS)
 
+all: minifyjpeg_main minifyjpeg_svc magickminify_test
 #### Cleanup ####
 clean:
 	rm -f *.o magickminify_test minifyjpeg_main minifyjpeg_svc 
