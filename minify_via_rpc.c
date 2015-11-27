@@ -23,12 +23,15 @@ void* minify_via_rpc(CLIENT *cl, void* src_val, size_t src_len, size_t *dst_len)
 	/*Your code here */
 
 
-	minify_in in = {.src = src_val, .src_len = src_len};
-	minify_in out = {.src = NULL, .src_len = 0};
-	char * dst_src = (char *)malloc(sizeof(char) * in.src_len);
-	minify_proc_1(in, &out, cl);
-	memcpy(dst_src, out.src, out.src_len);
-	return dst_src;
-    
+	minify_out in;
+	minify_out *outp = NULL;
+	in.src.src_len = src_len;
+	in.src.src_val = src_val;
 
+	outp = minify_proc_1(in, cl);
+	char * dst_src = (char *)malloc(sizeof(char) * outp->src.src_len);
+	memcpy(dst_src, outp->src.src_val, outp->src.src_len);
+	*dst_len = outp->src.src_len;
+	return dst_src;
 }
+

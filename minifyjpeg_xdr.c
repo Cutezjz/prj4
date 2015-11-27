@@ -6,13 +6,11 @@
 #include "minifyjpeg.h"
 
 bool_t
-xdr_minify_in (XDR *xdrs, minify_in *objp)
+xdr_minify_out (XDR *xdrs, minify_out *objp)
 {
 	register int32_t *buf;
 
-	 if (!xdr_string (xdrs, &objp->src, ~0))
-		 return FALSE;
-	 if (!xdr_long (xdrs, &objp->src_len))
+	 if (!xdr_bytes (xdrs, (char **)&objp->src.src_val, (u_int *) &objp->src.src_len, ~0))
 		 return FALSE;
 	return TRUE;
 }

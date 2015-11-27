@@ -2,21 +2,19 @@
 #include "magickminify.h"
 
 /* Implement the needed server-side functions here */
-
-bool_t minify_proc_1_svc(minify_in in, minify_in * out, struct svc_req * req)
+minify_out * minify_proc_1_svc(minify_out in, struct svc_req *req)
 {
-
-	puts("minify_proc_1_svc");
-	puts("steww");
-	printf("out.src_len = %d\n", out->src_len);
+	minify_out *out = (minify_out *)malloc(sizeof(minify_out));
+	size_t src_len;
 	magickminify_init();
-	puts("post init");
-	out->src = magickminify((void *)in.src, in.src_len, &out->src_len);
-	puts("post magickmnify");
-	printf("out.src_len = ", out->src_len);
+	out->src.src_val = magickminify(in.src.src_val, in.src.src_len, &src_len);
+	out->src.src_len = src_len;
+	printf("out->src.src_len = ", out->src.src_len);
 	//out->src_len = in.src_len;
 	magickminify_cleanup();
+	return out;
 }
+
 
 int minify_prog_1_freeresult (SVCXPRT *a, xdrproc_t b, caddr_t c)
 {

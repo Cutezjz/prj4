@@ -9,11 +9,17 @@
 /* Default timeout can be changed using clnt_control() */
 static struct timeval TIMEOUT = { 25, 0 };
 
-enum clnt_stat 
-minify_proc_1(minify_in arg1, minify_in *clnt_res,  CLIENT *clnt)
+minify_out *
+minify_proc_1(minify_out arg1,  CLIENT *clnt)
 {
-	return (clnt_call(clnt, MINIFY_PROC,
-		(xdrproc_t) xdr_minify_in, (caddr_t) &arg1,
-		(xdrproc_t) xdr_minify_in, (caddr_t) clnt_res,
-		TIMEOUT));
+	static minify_out clnt_res;
+
+	memset((char *)&clnt_res, 0, sizeof(clnt_res));
+	if (clnt_call (clnt, MINIFY_PROC,
+		(xdrproc_t) xdr_minify_out, (caddr_t) &arg1,
+		(xdrproc_t) xdr_minify_out, (caddr_t) &clnt_res,
+		TIMEOUT) != RPC_SUCCESS) {
+		return (NULL);
+	}
+	return (&clnt_res);
 }
